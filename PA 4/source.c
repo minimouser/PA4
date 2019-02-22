@@ -6,7 +6,7 @@
 
 //prints the rules to the game
 void printRules(void) {
-	printf("http://www.ildado.com/craps_rules.html \n");
+	printf(" A player rolls two dice. Each die has six faces. These faces contain 1, 2, 3, 4, 5, and 6 spots. After the dice have come to rest, the sum of the spots on the two upward faces is calculated. If the sum is 7 or 11 on the first throw, the player wins. If the sum is 2, 3, or 12 on the first throw (called craps), the player loses (i.e. the house wins). If the sum is 4, 5, 6, 8, 9, or 10 on the first throw, then the sum becomes the player's point. To win, you must continue rolling the dice until you make your point. The player loses by rolling a 7 before making the point.\n");
 }
 
 //prints the menu and returns the value from the input that the user inputs
@@ -58,14 +58,64 @@ int check_Wager_Amount(double bank, double wager) {
 
 //randomly chooses a number on a 6 sided die returns that random number 
 int roll_Die(void) {
-	int die = 1;
-
+	int die = 0;
+	die = (rand() % 6) + 1;
 	return die;
 }
 
+//calculates the sum of the 2 dice rolls
 int calculate_sum_dice(int d1, int d2) {
 	int sum = 0;
 	sum = d1 + d2;
 
 	return sum;
+}
+
+//checks if the die roll is a win or a loss, returns 1 if the player wins, returns 0 if they loose, 
+//and returns -1 if the player wins a point
+int is_win_loss_or_point(int sum_dice) {
+	int return_Value = NULL;
+
+	if (sum_dice == 7 || sum_dice == 11) {
+		return_Value = 1;
+	}
+	else if (sum_dice == 2 || sum_dice == 3 || sum_dice == 12) {
+		return_Value = 0;
+	}
+	else {
+		return_Value = -1;
+	}
+
+	return return_Value;
+}
+
+//adjusts the bank balance, inputs the bank balance, wager, and if it is added and subtracted then the
+//bank balance is returned
+double adjust_bank_balance(double bank_balance, double wager_amount, int add_or_subtract) {
+	double new_Bank_Balance = 0.0;
+
+	if (add_or_subtract > 0) {
+		new_Bank_Balance = bank_balance + wager_amount;
+	}
+	else {
+		new_Bank_Balance = bank_balance - wager_amount;
+	}
+
+	return new_Bank_Balance;
+}
+
+//Keeps track of the points, continues playing.
+int is_point_loss_or_neither(int sum_dice, int point_value) {
+	int point = 0;
+	point = is_win_loss_or_point(sum_dice);
+
+	if (point == 0) {
+		point_value = 2;
+	}
+	else {
+		point_value = point + point_value;
+	}
+
+
+	return point_value;
 }
